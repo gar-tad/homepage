@@ -27,6 +27,7 @@ router.beforeEach(async (to, from) => {
 
     if (authStore.user && to.meta.guest) return { name: 'home' };
     if (!authStore.user && to.meta.auth) return { name: 'login' };
+    if (authStore.user && !authStore.user.is_admin && to.meta.admin) return { name: 'home' };
 })
 
 export default router;

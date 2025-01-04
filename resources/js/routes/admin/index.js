@@ -6,7 +6,8 @@ export default [
     {
         path: '/admin',
         meta: {
-            auth: true
+            auth: true,
+            admin: true
         },
         children: [
             {
