@@ -46,9 +46,6 @@
                                 <i class="bi bi-plus"></i>
                                 Create new company
                             </router-link>
-                            <router-link :to="{ name: 'companies.archive' }" class="btn btn-link float-end">
-                                archive
-                            </router-link>
                         </div>
                         <div class="py-2">
                             <table class="table text-center">

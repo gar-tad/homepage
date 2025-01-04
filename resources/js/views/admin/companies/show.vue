@@ -65,7 +65,7 @@ import {onMounted, ref} from "vue";
 <template>
     <div v-if="company" class="container">
         <div class="row">
-            <div class="col-lg-6 mx-auto py-4">
+            <div class="col-lg-8 mx-auto py-4">
                 <header class="py-4">
                     <h2 class="text-center">
                         {{ company.name }}

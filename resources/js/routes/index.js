@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from "vue-router";
 import homeView from '../views/homepage.vue';
 import authRoutes from './auth.js';
-import companiesRoutes from './companies.js';
+import adminRoutes from './admin/index.js';
+
 
 import {useAuthStore} from "@/stores/auth.js";
 
@@ -12,7 +13,7 @@ const routes = [
         component: homeView
     },
     ...authRoutes,
-    ...companiesRoutes,
+    ...adminRoutes
 ]
 
 const router = createRouter({

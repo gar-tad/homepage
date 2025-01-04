@@ -1,0 +1,3 @@
+<template>
+    homepage admin
+</template>

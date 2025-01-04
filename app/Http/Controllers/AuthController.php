@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(StoreUserRequest $request): array
+    public function register(StoreUserRequest $request): JsonResponse|array
     {
         $user = User::create([
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'is_admin' => $request->has('is_admin')
         ]);
 
         $token = $user->createToken($user->email)->plainTextToken;

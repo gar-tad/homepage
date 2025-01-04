@@ -26,18 +26,18 @@
                         Log in to your profile
                     </div>
                     <div class="card-body">
-                        <form @submit.prevent="authenticate('login', formData)">
+                        <form @submit.prevent="authenticate('login', $event)">
                             <div v-if="errors.credentials" class="mb-3">
                                 <p class="text-danger">{{ errors.credentials[0] }}</p>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
-                                <input type="text" class="form-control" id="email" v-model="formData.email" v-on:keyup="keyUpHandler('email', $event)">
+                                <input type="text" class="form-control" id="email" name="email" v-model="formData.email" v-on:keyup="keyUpHandler('email', $event)">
                                 <div v-if="errors.email" class="form-text text-danger">{{ errors.email[0] }}</div>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" v-model="formData.password" v-on:keyup="cleanError('password')">
+                                <input type="password" class="form-control" id="password" name="password" v-model="formData.password" v-on:keyup="cleanError('password')">
                                 <div v-if="errors.password" class="form-text text-danger">{{ errors.password[0] }}</div>
                             </div>
                             <div class="row">

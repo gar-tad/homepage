@@ -16,6 +16,8 @@ class CompanyController extends Controller
      */
     public function index(Request $request): Collection
     {
+        Gate::authorize('isAdmin', Company::class);
+
         $companies = $request->user()->companies()
             ->filtered($request->search)
             ->orderBy('updated_at', 'desc')
@@ -24,17 +26,13 @@ class CompanyController extends Controller
         return $companies;
     }
 
-    public function getArchived(Request $request): Collection
-    {
-        return $request->user()->companies()->onlyTrashed()->orderBy('updated_at', 'desc')->get();
-    }
-
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCompanyRequest $request): Company
     {
+        Gate::authorize('isAdmin', Company::class);
+
         $company = $request->user()->companies()->create($request->all());
         return $company;
     }

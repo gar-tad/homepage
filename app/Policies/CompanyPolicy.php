@@ -4,10 +4,17 @@ namespace App\Policies;
 
 use App\Models\Company;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CompanyPolicy
 {
+    /**
+     * Determine whether the user is admin.
+     */
+    public function isAdmin(User $user): bool
+    {
+        return $user->is_admin;
+    }
+
     /**
      * Determine whether the user can view the model.
      */
@@ -30,21 +37,5 @@ class CompanyPolicy
     public function delete(User $user, Company $company): bool
     {
         return $user->id === $company->user_id;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Company $company): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Company $company): bool
-    {
-        return false;
     }
 }

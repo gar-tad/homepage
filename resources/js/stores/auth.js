@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {api} from "@/bootstrap.js";
+import {client, api} from "@/bootstrap.js";
 
 export const useAuthStore = defineStore('authStore', {
     state: () => {
@@ -9,31 +9,41 @@ export const useAuthStore = defineStore('authStore', {
         }
     },
     getters: {
-        userName: (state) => { return state.user.username ?? state.user.email },
+        userName: (state) => { return state.user.username.length > 0 ? state.user.username : state.user.email },
     },
     actions: {
         async getUser() {
+            if (this.user) return;
+
             const token = localStorage.getItem('token');
-            if (!token) return null;
+
+            if (!token) {
+                this.user = null;
+                return
+            }
 
             api.defaults.headers['authorization'] = `Bearer ${token}`
+            client.defaults.headers['authorization'] = `Bearer ${token}`
 
             try {
-                const response = await api.get('user');
+                const response = await client.get('user');
                 this.user = response.data;
             } catch (error) {
                 this.user = null;
             }
         },
-        async authenticate(action, formData) {
+        async authenticate(action, event) {
             try {
-                const response = await api.post(action,formData);
+                const formData = new FormData(event.target);
+                const response = await client.post(action,formData);
 
                 localStorage.setItem('token', response.data.token);
                 api.defaults.headers['authorization'] = `Bearer ${response.data.token}`
+                client.defaults.headers['authorization'] = `Bearer ${response.data.token}`
                 this.user = response.data.user;
                 this.errors = {};
-                this.router.push({name: 'home'});
+                const redirect = this.user.is_admin ? 'admin.index' : 'home';
+                this.router.push({name: redirect});
             } catch (error) {
                 if (error.response) {
                     this.errors = error.response.data.errors;
@@ -41,12 +51,13 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
         async logOut() {
-            await api.post('logout');
+            await client.post('logout');
 
             localStorage.removeItem('token');
             this.user = null;
             this.errors = {};
-            delete api.defaults.headers['authorization'];
+            api.defaults.headers['authorization'] = null;
+            client.defaults.headers['authorization'] = null;
             this.router.push({name: 'home'});
         },
         cleanError(errorKey) {
